@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +20,16 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
+    // abort(500); //Added for feature testing  
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+Route::get('admin/dashboard', function () {
+    // abort(500); //Added for feature testing  
+    return view('dashboard');
+})->middleware(['auth', 'verified','isAdmin'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

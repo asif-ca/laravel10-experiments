@@ -26,5 +26,26 @@ class DashboardTest extends TestCase
         $response->assertStatus(200);
     }
 
-    
+    public function test_user_is_admin_dashboard_rendered(): void
+    {
+        $user = User::factory()->create([
+            'is_admin' => 1,
+        ]);
+                
+        $response = $this->actingAs($user)
+                         ->get('/admin/dashboard');
+        $response->assertStatus(200);
+    }
+
+    public function test_user_is_not_admin_redirect(): void
+    {
+        $user = User::factory()->create([
+            'is_admin' => 0,
+        ]);
+                
+        $response = $this->actingAs($user)
+                         ->get('/admin/dashboard');
+        
+        $response->assertStatus(302);
+    }
 }
