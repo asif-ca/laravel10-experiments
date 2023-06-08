@@ -11,6 +11,7 @@ use App\Providers\RouteServiceProvider;
 class DashboardTest extends TestCase
 {
 
+    // readon https://vegibit.com/how-to-create-a-feature-test-in-laravel/
     use RefreshDatabase;
 
     /**
