@@ -92,7 +92,8 @@ class ProductsTest extends TestCase
         $response = $this->actingAs($this->admin)
                         ->post('/product/create',$product);
 
-        $response->assertStatus(302); // becuae we redirects back to product.index
+        $response->assertStatus(302);
+        $response->assertRedirect('products');
         $this->assertDatabaseHas('products',$product);
 
         // Also check if product was already stored or just created now
