@@ -94,6 +94,7 @@ class ProductsTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertRedirect('products');
+        
         $this->assertDatabaseHas('products',$product);
 
         // Also check if product was already stored or just created now
@@ -105,6 +106,37 @@ class ProductsTest extends TestCase
         $this->assertEquals($product->price, $lastProduct->price);
     }
 
+    public function test_product_edit_from_has_correct_values(): void 
+    {
+        $product = Product::factory()->create();
+
+        $response = $this->actingAs($this->admin)
+                        ->get('product/'.$product->id.'/edit');
+
+        $response->assertStatus(200);
+        $response->assertSee('value="'.$product->name.'"',false);
+        $response->assertSee('value="'.$product->price.'"',false);
+        
+        $response->assertViewHas('product',$product);
+
+    }
+
+    public function test_product_update_validation_redirect_back_with_errors(): void 
+    {
+        $product = Product::factory()->create();
+
+        $response = $this->actingAs($this->admin)
+                        ->post('product/'.$product->id.'/update',[
+                            'name' => '',
+                            'price' => 52.3,
+                        ]);
+                       
+        $response->assertStatus(302);
+        // $response->assertSessionHasErrors(['name']);
+        $response->assertInvalid(['name', 'price']);
+
+
+    }
 
     private function createUser(bool $isAdmin = false) {
         

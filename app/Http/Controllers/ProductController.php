@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\ProductUpdateRequest;
 
 class ProductController extends Controller
 {
@@ -25,6 +26,16 @@ class ProductController extends Controller
 
         Product::create($request->validated());
 
+        return redirect(route('products.index'));
+    }
+
+    public function edit(Product $product) {
+        return view('products.edit',compact('product'));
+    }
+
+
+    public function update(ProductUpdateRequest $request, Product $product) {
+        $product->update($request->validated());
         return redirect(route('products.index'));
     }
 }
